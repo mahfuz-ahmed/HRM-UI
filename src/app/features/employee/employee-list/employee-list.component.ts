@@ -1,33 +1,35 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Employee } from '../../../domain/models/employee';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { EmployeeService } from '../../../domain/services/employee.service';
 import { Router } from '@angular/router';
 import { SharedPrimeNgModule } from '../../../shared/common/shared-prime-ng.module';
+import { UserService } from '../../../domain/services/user.service';
+import { User } from '../../../domain/models/user';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [SharedPrimeNgModule],
+  imports: [SharedPrimeNgModule,LoadingComponent],
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.scss'
 })
 export class EmployeeListComponent implements OnInit {
 
-  employees: Employee[] | any;
-  employee: Employee | any;
+  employees: User[] | any;
+  employee: User | any;
   selectedEmployee: any;
   loading: boolean = false;
 
-  constructor(private employeeService: EmployeeService, private messageService: MessageService,private router: Router, private confirmationService: ConfirmationService){}
+  constructor(private userService: UserService, private messageService: MessageService,private router: Router, private confirmationService: ConfirmationService){}
 
   async ngOnInit(){
     this.getAllTest();
   }
 
-   async getAllEmployees() {
+  async getAllEmployees() {
    try {
-     this.employees = await this.employeeService.getAllCompanyEmployeeAsync(1);
+    this.loading = true;
+     this.employees = await this.userService.getAllCompanyEmployeeAsync(1);
    } catch (error) {
      this.loading = false;
      throw new Error(`Error while getting all company employees ${error}`)
@@ -37,7 +39,8 @@ export class EmployeeListComponent implements OnInit {
 
   async getAllTest() {
    try {
-     this.employees = await this.employeeService.getAllEmployee();
+    this.loading = true;
+     this.employees = await this.userService.getAllEmployee();
    } catch (error) {
      this.loading = false;
      throw new Error(`Error while getting all company employees ${error}`)
@@ -76,7 +79,7 @@ export class EmployeeListComponent implements OnInit {
 
  async employeeDelete() {
    try {
-     const isDeleted: boolean = await this.employeeService.deleteEmployeeByID(this.selectedEmployee.id);
+     const isDeleted: boolean = await this.userService.deleteEmployeeByID(this.selectedEmployee.id);
      if (isDeleted) {
        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Employee Deleted Successfully.', life: 3000 });
        await this.getAllEmployees();

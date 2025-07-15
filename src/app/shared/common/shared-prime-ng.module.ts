@@ -12,6 +12,10 @@ import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PasswordModule } from 'primeng/password';
+import { RouterModule } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   exports: [
@@ -24,7 +28,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     CheckboxModule,
     TooltipModule,
     RippleModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ReactiveFormsModule,
+    PasswordModule,
+    RouterModule,
+    DialogModule,
+    FormsModule
   ],
   providers: [MessageService, ConfirmationService]
 })

@@ -1,5 +1,6 @@
-export interface Employee {
+export interface User {
   id: number;
+  companyID: number;
   userID: string;
   fullName: string;
   email: string;
@@ -7,7 +8,7 @@ export interface Employee {
   isActive: boolean;
   isAdmin: boolean;
   joinDate: Date;
-  entryUserID: string;
+  entryUserID: number;
   entryDate: Date;
   updateUserID: string | null;
   updateDate: Date | null;

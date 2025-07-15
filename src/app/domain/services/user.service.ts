@@ -1,36 +1,36 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { Employee } from '../models/employee';
 import { environment } from '../../../environments/environment.prod';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeService {
+export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  async getDataById(Id: number): Promise<Employee> {
+  async getDataById(Id: number): Promise<User> {
     const url = `${environment.apiUrl}/employee/GetDataByID/${Id}`;
-    return firstValueFrom(this.http.get<Employee>(url));
+    return firstValueFrom(this.http.get<User>(url));
   }
 
-  async getAllEmployee(): Promise<Employee[]> {
-    return firstValueFrom(this.http.get<any[]>(`${environment.apiUrl}/api/employee/getallemployee`));
+  async getAllEmployee(): Promise<User[]> {
+    return firstValueFrom(this.http.get<any[]>(`${environment.apiUrl}/api/user/getallemployee`));
   }
 
-  async getAllCompanyEmployeeAsync(companyId: number): Promise<Employee[]> {
+  async getAllCompanyEmployeeAsync(companyId: number): Promise<User[]> {
     return firstValueFrom(
-      this.http.get<Employee[]>(`${environment.apiUrl}/employee/getallcompanyemployee?companyId=${companyId}`)
+      this.http.get<User[]>(`${environment.apiUrl}/employee/getallcompanyemployee?companyId=${companyId}`)
     ).catch(error => {
       throw error;
     });
   }
 
-  async getDataByEmail(email: string): Promise<Employee> {
+  async getDataByEmail(email: string): Promise<User> {
     const url = `${environment.apiUrl}/employee/GetDataByEmail/${email}`;
-    return firstValueFrom(this.http.get<Employee>(url));
+    return firstValueFrom(this.http.get<User>(url));
   }
 
   async deleteEmployeeByID(id: number): Promise<any> {
@@ -38,7 +38,7 @@ export class EmployeeService {
     return firstValueFrom(this.http.delete(url));
   }
 
-  async createEmployee(employee: Employee): Promise<any> {
+  async createEmployee(employee: User): Promise<any> {
     return firstValueFrom(this.http.post<any>(`${environment.apiUrl}/employee/addemployee`, employee));
   }
 }
