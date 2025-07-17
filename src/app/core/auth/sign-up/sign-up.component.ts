@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
 import { SharedPrimeNgModule } from '../../../shared/common/shared-prime-ng.module';
 import { AuthService } from '../../../domain/services/auth-service/auth.service';
 import { SignUp } from '../../../domain/models/auth/signup';
-import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 @Component({
@@ -22,7 +20,6 @@ export class SignUpComponent implements OnInit {
 
     constructor(
         private messageService: MessageService,
-        private router: Router,
         private authService: AuthService,
         private fb: FormBuilder
     ) {}
@@ -56,7 +53,32 @@ export class SignUpComponent implements OnInit {
             return;
         }
 
-        const data: SignUp = {
+        var signupData = await this.prepareData();
+
+        try {
+            this.loading = true;
+            var response = await this.authService.signUp(signupData);
+            if (response) {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Signup successful!' });
+            }
+            this.signupForm.reset();
+        } catch (error: any) {
+            if (error.status == 409) {
+                this.messageService.add({ severity: 'warn', summary: 'Exist', detail: error?.error.Message });
+            } else {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: error?.message || 'Signup failed'
+                });
+            }
+        } finally {
+            this.loading = false;
+        }
+    }
+
+    async prepareData(): Promise<SignUp> {
+        const signUpData: SignUp = {
             id: 0,
             email: this.signupForm.value.email,
             name: this.signupForm.value.company,
@@ -85,20 +107,6 @@ export class SignUpComponent implements OnInit {
                 updateDate: null
             }
         };
-        try {
-            this.loading = true;
-            var response = await this.authService.signUp(data);
-            if (response) {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Signup successful!' });
-                // this.router.navigate(['/auth/login']);
-            }
-            this.loading = false;
-        } catch (error: any) {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: error?.message || 'Signup failed'
-            });
-        }
+        return signUpData;
     }
 }
