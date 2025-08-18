@@ -34,6 +34,17 @@ export class AuthService {
             tap((user) => this.saveSession(user)) // save new session
         );
     }
+
+    refreshToken(): Observable<Login> {
+        const refreshToken = this.getRefreshToken();
+        if (!refreshToken) {
+            throw new Error('No refresh token available');
+        }
+        return this.http.post<Login>(`${environment.apiUrl}/api/auth/refresh`, { refreshToken }).pipe(
+            tap((user) => this.saveSession(user)) // Update tokens and user
+        );
+    }
+
     // Save tokens and user info in localStorage & update BehaviorSubject
     saveSession(user: Login): void {
         localStorage.setItem(this.tokenKey, user.jwtToken);

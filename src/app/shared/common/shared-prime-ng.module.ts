@@ -16,25 +16,27 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { RouterModule } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
-  exports: [
-    CommonModule,
-    TableModule,
-    ToolbarModule,
-    InputTextModule,
-    ToastModule,
-    ButtonModule,
-    CheckboxModule,
-    TooltipModule,
-    RippleModule,
-    ConfirmDialogModule,
-    ReactiveFormsModule,
-    PasswordModule,
-    RouterModule,
-    DialogModule,
-    FormsModule
-  ],
-  providers: [MessageService, ConfirmationService]
+    exports: [
+        CommonModule,
+        TableModule,
+        ToolbarModule,
+        InputTextModule,
+        ToastModule,
+        ButtonModule,
+        CheckboxModule,
+        TooltipModule,
+        RippleModule,
+        ConfirmDialogModule,
+        ReactiveFormsModule,
+        PasswordModule,
+        RouterModule,
+        DialogModule,
+        FormsModule,
+        DropdownModule
+    ],
+    providers: [MessageService, ConfirmationService]
 })
 export class SharedPrimeNgModule {}

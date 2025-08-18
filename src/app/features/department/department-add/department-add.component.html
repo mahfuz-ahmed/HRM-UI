@@ -1,0 +1,22 @@
+<p-dialog header="Add Department" [modal]="true" [(visible)]="visible" [style]="{ width: '28rem' }">
+    <div class="flex flex-col gap-4 mb-4 ml-4">
+        <div class="flex items-center gap-4">
+            <label class="w-14 font-semibold">Code</label>
+            <input id="departmentCode" style="width: 15rem" pInputText [(ngModel)]="department.departmentCode" />
+        </div>
+        <div class="flex items-center gap-4">
+            <label class="w-14 font-semibold">Name</label>
+            <input id="departmentName" style="width: 15rem" pInputText [(ngModel)]="department.departmentName" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label class="w-14 font-semibold">Status</label>
+            <p-dropdown appendTo="body" [options]="statusOptions" [(ngModel)]="department.isActive"></p-dropdown>
+        </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-6">
+        <p-button label="Cancel" severity="secondary" (click)="hide()"></p-button>
+        <p-button label="Save" (click)="onSave()"></p-button>
+    </div>
+</p-dialog>
+<app-loading [isLoading]="loading"></app-loading>
