@@ -1,1 +1,26 @@
-<p>designation-add works!</p>
+<p-dialog header="Add Designation" [modal]="true" [(visible)]="visible" [style]="{ width: '28rem' }">
+    <div class="flex flex-col gap-4 mb-4 ml-4">
+        <div class="flex items-center gap-4">
+            <label class="w-20 font-semibold">Department</label>
+            <p-dropdown [style]="{ width: '15rem' }" appendTo="body" [options]="departments" optionLabel="departmentName" optionValue="id" [(ngModel)]="designation.departmentID"></p-dropdown>
+        </div>
+        <div class="flex items-center gap-4">
+            <label class="w-20 font-semibold">Code</label>
+            <input id="designationCode" style="width: 15rem" pInputText [(ngModel)]="designation.designationCode" />
+        </div>
+        <div class="flex items-center gap-4">
+            <label class="w-20 font-semibold">Name</label>
+            <input id="designationName" style="width: 15rem" pInputText [(ngModel)]="designation.designationName" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label class="w-20 font-semibold">Status</label>
+            <p-dropdown appendTo="body" [options]="statusOptions" [(ngModel)]="designation.isActive"></p-dropdown>
+        </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-6">
+        <p-button label="Cancel" severity="secondary" (click)="hide()"></p-button>
+        <p-button label="Save" (click)="onSave()"></p-button>
+    </div>
+</p-dialog>
+<app-loading [isLoading]="loading"></app-loading>

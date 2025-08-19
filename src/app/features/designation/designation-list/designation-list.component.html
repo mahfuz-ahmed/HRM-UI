@@ -1,1 +1,105 @@
-<p>designation-list works!</p>
+<div class="grid">
+    <div class="col-md-12"></div>
+
+    <div class="card card-compact">
+        <h5>Designation</h5>
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-success mr-2" (click)="openAddDialog()" pTooltip="Add Designation" tooltipPosition="bottom"></button>
+                <button type="button" pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2" (click)="designationDelete()" pTooltip="Designation Delete" tooltipPosition="bottom" [disabled]="!selectedDesignation"></button>
+                <app-designation-add #addDialog (saved)="onDesignationSaved()"></app-designation-add>
+            </div>
+            <div class="p-toolbar-group-right">
+                <span class="p-input-icon-right">
+                    <input #searchInput type="text" pInputText (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search" />
+                </span>
+            </div>
+        </p-toolbar>
+        <p-toast />
+        <p-table
+            #dt
+            [value]="designations"
+            selectionMode="single"
+            [(selection)]="selectedDesignation"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 20, 50]"
+            [globalFilterFields]="['isActive', 'designationCode', 'designationName']"
+            dataKey="id"
+            editMode="row"
+            [tableStyle]="{ 'min-width': '50rem' }"
+        >
+            <ng-template #header>
+                <tr>
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th pSortableColumn="departmentName">Department<p-sortIcon field="departmentName"></p-sortIcon></th>
+                    <th pSortableColumn="designationCode">Code<p-sortIcon field="designationCode"></p-sortIcon></th>
+                    <th pSortableColumn="designationName">Name<p-sortIcon field="designationName"></p-sortIcon></th>
+                    <th pSortableColumn="isActive">Status<p-sortIcon field="isActive"></p-sortIcon></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-designation let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="designation">
+                    <td>
+                        <p-tableCheckbox [value]="designation"></p-tableCheckbox>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <p-dropdown appendTo="body" [options]="departments" optionLabel="departmentName" optionValue="id" [(ngModel)]="designation.departmentID"> </p-dropdown>
+                            </ng-template>
+                            <ng-template #output>
+                                {{ designation.department?.departmentName }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+
+                    <td>
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="designation.designationCode" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ designation.designationCode }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="designation.designationName" required />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ designation.designationName }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <!-- Input (Edit Mode) -->
+                            <ng-template pTemplate="input">
+                                <p-dropdown appendTo="body" [options]="statusOptions" [(ngModel)]="designation.isActive" optionLabel="label" optionValue="value" placeholder="Select Status"> </p-dropdown>
+                            </ng-template>
+
+                            <!-- Output (View Mode) -->
+                            <ng-template pTemplate="output">
+                                {{ designation.isActive ? 'Active' : 'InActive' }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+
+                    <td>
+                        <div class="flex items-center justify-center gap-2">
+                            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(designation)" text rounded severity="secondary"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(designation)" text rounded severity="secondary"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(designation, ri)" text rounded severity="secondary"></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
