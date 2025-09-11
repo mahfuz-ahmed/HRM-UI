@@ -1,0 +1,41 @@
+.card {
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.row {
+    display: flex;
+    gap: 1rem;
+}
+
+.col {
+    flex: 1;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.mt-6 {
+    margin-top: 2rem;
+}
+
+.p-float-label input,
+.p-float-label textarea {
+    width: 100%;
+}
+
+.p-dropdown {
+    width: 100%;
+}
+
+button[pButton] {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+button[pButton]:disabled {
+    background-color: #cccccc;
+    border-color: #cccccc;
+}

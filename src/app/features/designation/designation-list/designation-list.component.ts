@@ -8,20 +8,22 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../domain/services/auth-service/auth.service';
 import { Department } from '../../../domain/models/department';
 import { DepartmentService } from '../../../domain/services/department.service';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 @Component({
     selector: 'app-designation-list',
-    imports: [SharedPrimeNgModule, DesignationAddComponent],
+    imports: [SharedPrimeNgModule, DesignationAddComponent, LoadingComponent],
     templateUrl: './designation-list.component.html',
     styleUrl: './designation-list.component.scss'
 })
 export class DesignationListComponent {
     designations!: Designation[];
-    selectedDesignation!: Designation[];
+    selectedDesignation: Designation[] = [];
     departments!: Department[];
     clonedDesignations: { [s: string]: Designation } = {};
     @ViewChild('addDialog') addDialog!: DesignationAddComponent;
     loginUser!: Login;
+    loading: boolean = false;
 
     constructor(
         private designationService: DesignationService,
@@ -38,20 +40,26 @@ export class DesignationListComponent {
     ];
 
     async ngOnInit() {
-        await this.getallDesignation();
-        await this.getallDepartment();
+        await this.laoadData();
     }
 
-    async getallDesignation() {
-        this.designationService.getDataByCompanyId(this.loginUser.companyID).then((data) => {
-            this.designations = data;
-        });
-    }
+    async laoadData() {
+        this.loading = true;
+        try {
+            const [designations, departments] = await Promise.all([this.designationService.getDataByCompanyId(this.loginUser.companyID), this.departmentService.getDataByCompanyId(this.loginUser.companyID)]);
 
-    async getallDepartment() {
-        this.departmentService.getDataByCompanyId(this.loginUser.companyID).then((data) => {
-            this.departments = data;
-        });
+            this.designations = designations;
+            this.departments = departments;
+        } catch (error) {
+            console.error('Failed to load initial data', error);
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Failed to load initial data'
+            });
+        } finally {
+            this.loading = false;
+        }
     }
 
     openAddDialog() {
@@ -61,7 +69,7 @@ export class DesignationListComponent {
     async onDesignationSaved() {
         // Refresh your department list or do other actions
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Designation Save Successfully.', life: 3000 });
-        await this.getallDesignation();
+        await this.laoadData();
     }
 
     onRowEditInit(designation: Designation) {
@@ -109,10 +117,25 @@ export class DesignationListComponent {
                 life: 3000
             });
 
-            await this.getallDesignation();
-            this.selectedDesignation = []; // clear selection
-        } catch (error) {
-            console.error('Error deleting departments:', error);
+            this.selectedDesignation = [];
+        } catch (error: any) {
+            console.error('Error deleting designations:', error);
+
+            if (error.error?.title === 'IsUsed') {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Warning',
+                    detail: error.error?.detail || 'This Designation is used in another component'
+                });
+            } else {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Failed to delete designation'
+                });
+            }
+        } finally {
+            await this.laoadData();
         }
     }
 }

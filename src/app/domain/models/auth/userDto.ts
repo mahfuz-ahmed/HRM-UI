@@ -1,6 +1,4 @@
-import { UserDetails } from './user-details';
-
-export interface User {
+export interface SignUpUserDto {
     id: number;
     companyID: number;
     fullName: string;
@@ -13,5 +11,4 @@ export interface User {
     entryDate: Date;
     updateUserID: string | null;
     updateDate: Date | null;
-    userDetails: UserDetails;
 }

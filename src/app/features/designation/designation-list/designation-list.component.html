@@ -6,7 +6,7 @@
         <p-toolbar>
             <div class="p-toolbar-group-left">
                 <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-success mr-2" (click)="openAddDialog()" pTooltip="Add Designation" tooltipPosition="bottom"></button>
-                <button type="button" pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2" (click)="designationDelete()" pTooltip="Designation Delete" tooltipPosition="bottom" [disabled]="!selectedDesignation"></button>
+                <button type="button" pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2" (click)="designationDelete()" pTooltip="Designation Delete" tooltipPosition="bottom" [disabled]="!selectedDesignation.length"></button>
                 <app-designation-add #addDialog (saved)="onDesignationSaved()"></app-designation-add>
             </div>
             <div class="p-toolbar-group-right">
@@ -103,3 +103,4 @@
         </p-table>
     </div>
 </div>
+<app-loading [isLoading]="loading"></app-loading>

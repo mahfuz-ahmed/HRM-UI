@@ -17,6 +17,11 @@ import { PasswordModule } from 'primeng/password';
 import { RouterModule } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { DatePickerModule } from 'primeng/datepicker';
+import { CardModule } from 'primeng/card';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
     exports: [
@@ -35,7 +40,12 @@ import { DropdownModule } from 'primeng/dropdown';
         RouterModule,
         DialogModule,
         FormsModule,
-        DropdownModule
+        DropdownModule,
+        IconFieldModule,
+        InputIconModule,
+        DatePickerModule,
+        CardModule,
+        FileUploadModule
     ],
     providers: [MessageService, ConfirmationService]
 })

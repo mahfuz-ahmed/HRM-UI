@@ -27,7 +27,7 @@ export class AppMenu {
             {
                 label: 'UI Components',
                 items: [
-                    { label: 'Employee', icon: 'pi pi-fw pi-id-card', routerLink: ['/features/list'] },
+                    { label: 'Employee', icon: 'pi pi-fw pi-id-card', routerLink: ['/features/employees'] },
                     { label: 'Department', icon: 'pi pi-fw pi-id-card', routerLink: ['/features/department'] },
                     { label: 'Designation', icon: 'pi pi-fw pi-id-card', routerLink: ['/features/designation'] },
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },

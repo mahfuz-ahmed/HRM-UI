@@ -1,28 +1,3 @@
-// import { HttpInterceptorFn } from '@angular/common/http';
-// import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
-// import { Observable } from 'rxjs';
-// import { environment } from '../../../../environments/environment';
-
-// export const authInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
-//     // Get the token from localStorage
-//     const token = localStorage.getItem('token');
-
-//     // If token exists, clone the request and add the Authorization header
-//     if (token) {
-//         request = request.clone({
-//             setHeaders: {
-//                 Authorization: `Bearer ${token}`
-//             }
-//         });
-//     } else {
-//         window.location.href = `${environment.hrmUrl}/auth/login`;
-//         // return throwError(() => error);
-//     }
-
-//     // Pass the request to the next handler
-//     return next(request);
-// };
-
 import { HttpInterceptorFn } from '@angular/common/http';
 import { HttpRequest, HttpHandlerFn, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -34,14 +9,14 @@ import { environment } from '../../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
     const authService = inject(AuthService);
-    const token = authService.getToken();
+    let token = authService.getToken();
 
-    // Skip adding Authorization header for login and refresh endpoints
+    // Skip login and refresh calls
     if (request.url.includes('/api/auth/login') || request.url.includes('/api/auth/refresh')) {
         return next(request);
     }
 
-    // Add Authorization header if token exists
+    // Add Authorization header
     if (token) {
         request = request.clone({
             setHeaders: {
@@ -53,19 +28,20 @@ export const authInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, ne
     return next(request).pipe(
         catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
+                // Try refreshing token
                 return authService.refreshToken().pipe(
                     switchMap((user: Login) => {
-                        // Retry the original request with the new token
-                        request = request.clone({
+                        token = user.jwtToken;
+                        const clonedRequest = request.clone({
                             setHeaders: {
-                                Authorization: `Bearer ${user.jwtToken}`
+                                Authorization: `Bearer ${token}`
                             }
                         });
-                        return next(request);
+                        return next(clonedRequest);
                     }),
                     catchError((refreshError) => {
-                        // If refresh fails, log out and redirect to login
-                        // authService.logout();
+                        // Refresh failed → logout + redirect
+                        authService.clearSession();
                         window.location.href = `${environment.hrmUrl}/auth/login`;
                         return throwError(() => refreshError);
                     })

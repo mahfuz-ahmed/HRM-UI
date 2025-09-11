@@ -4,8 +4,8 @@ import { MessageService } from 'primeng/api';
 import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
 import { SharedPrimeNgModule } from '../../../shared/common/shared-prime-ng.module';
 import { AuthService } from '../../../domain/services/auth-service/auth.service';
-import { SignUp } from '../../../domain/models/auth/signup';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
+import { SignUpDto } from '../../../domain/models/auth/signupDto';
 
 @Component({
     selector: 'app-sign-up',
@@ -77,8 +77,8 @@ export class SignUpComponent implements OnInit {
         }
     }
 
-    async prepareData(): Promise<SignUp> {
-        const signUpData: SignUp = {
+    async prepareData(): Promise<SignUpDto> {
+        const signUpData: SignUpDto = {
             id: 0,
             email: this.signupForm.value.email,
             name: this.signupForm.value.company,
@@ -93,8 +93,7 @@ export class SignUpComponent implements OnInit {
             updateDate: null,
             userDto: {
                 id: 0,
-                companyID: 1,
-                userID: '1223',
+                companyID: 0,
                 fullName: this.signupForm.value.company,
                 email: this.signupForm.value.email,
                 password: this.signupForm.value.password,

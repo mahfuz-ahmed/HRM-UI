@@ -6,8 +6,9 @@ import { DepartmentComponent } from './department/department/department.componen
 import { DesignationListComponent } from './designation/designation-list/designation-list.component';
 
 export default [
-    { path: 'list', component: EmployeeListComponent, canActivate: [AuthGuard] },
-    { path: 'add-edit', component: EmployeeAddEditComponent, canActivate: [AuthGuard] },
+    { path: 'employees', component: EmployeeListComponent, canActivate: [AuthGuard] },
+    { path: 'employee-add-edit', component: EmployeeAddEditComponent, canActivate: [AuthGuard] },
+    { path: 'employee-add-edit/:id', component: EmployeeAddEditComponent, canActivate: [AuthGuard] },
     { path: 'department', component: DepartmentComponent, canActivate: [AuthGuard] },
     { path: 'designation', component: DesignationListComponent, canActivate: [AuthGuard] },
     { path: '**', redirectTo: '/notfound' }

@@ -6,7 +6,7 @@
         <p-toolbar>
             <div class="p-toolbar-group-left">
                 <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-success mr-2" (click)="openAddDialog()" pTooltip="Add Department" tooltipPosition="bottom"></button>
-                <button type="button" pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2" (click)="departmentDelete()" pTooltip="Department Delete" tooltipPosition="bottom" [disabled]="!selectedDepartment"></button>
+                <button type="button" pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2" (click)="departmentDelete()" pTooltip="Department Delete" tooltipPosition="bottom" [disabled]="!selectedDepartment.length"></button>
                 <app-department-add #addDialog (saved)="onDepartmentSaved()"></app-department-add>
             </div>
             <div class="p-toolbar-group-right">
@@ -91,3 +91,4 @@
         </p-table>
     </div>
 </div>
+<app-loading [isLoading]="loading"></app-loading>

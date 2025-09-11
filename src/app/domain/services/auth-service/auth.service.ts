@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom, Observable, tap } from 'rxjs';
-import { environment } from '../../../../environments/environment.prod';
-import { SignUp } from '../../models/auth/signup';
+import { environment } from '../../../../environments/environment';
 import { LoginRequest } from '../../models/auth/login-request';
 import { Login } from '../../models/auth/login';
+import { SignUpDto } from '../../models/auth/signupDto';
 
 @Injectable({
     providedIn: 'root'
@@ -13,21 +13,12 @@ export class AuthService {
     private tokenKey = 'token';
     private refreshTokenKey = 'refreshToken';
     private userKey = 'user';
+
     private currentUserSubject = new BehaviorSubject<Login | null>(this.getUserFromStorage());
+
     constructor(private http: HttpClient) {}
 
-    // async login(loginRequest: LoginRequest): Promise<Login> {
-    //     return firstValueFrom(this.http.post<Login>(`${environment.apiUrl}/api/auth/login`, loginRequest));
-    // }
-
-    // login(loginRequest: LoginRequest): Observable<Login> {
-    //     return this.http.post<Login>(`${environment.apiUrl}/api/auth/login`, loginRequest);
-    // }
-
-    async signUp(signUp: SignUp) {
-        return await firstValueFrom(this.http.post<any>(`${environment.apiUrl}/api/auth/signup`, signUp));
-    }
-
+    // Login
     login(loginRequest: LoginRequest): Observable<Login> {
         return this.http.post<Login>(`${environment.apiUrl}/api/auth/login`, loginRequest).pipe(
             tap(() => this.clearSession()), // clear old session
@@ -35,17 +26,31 @@ export class AuthService {
         );
     }
 
-    refreshToken(): Observable<Login> {
-        const refreshToken = this.getRefreshToken();
-        if (!refreshToken) {
-            throw new Error('No refresh token available');
-        }
-        return this.http.post<Login>(`${environment.apiUrl}/api/auth/refresh`, { refreshToken }).pipe(
-            tap((user) => this.saveSession(user)) // Update tokens and user
-        );
+    // Signup
+    async signUp(signUp: SignUpDto) {
+        return await firstValueFrom(this.http.post<any>(`${environment.apiUrl}/api/auth/signup`, signUp));
     }
 
-    // Save tokens and user info in localStorage & update BehaviorSubject
+    // Refresh token
+    refreshToken(): Observable<Login> {
+        const refreshToken = this.getRefreshToken();
+        const token = this.getToken();
+
+        if (!refreshToken || !token) {
+            throw new Error('No refresh token available');
+        }
+
+        return this.http
+            .post<Login>(`${environment.apiUrl}/api/auth/refresh`, {
+                token,
+                refreshToken
+            })
+            .pipe(
+                tap((user) => this.saveSession(user)) // save new tokens
+            );
+    }
+
+    // Save tokens and user
     saveSession(user: Login): void {
         localStorage.setItem(this.tokenKey, user.jwtToken);
         localStorage.setItem(this.refreshTokenKey, user.refreshToken);
@@ -53,7 +58,7 @@ export class AuthService {
         this.currentUserSubject.next(user);
     }
 
-    // Clear all auth data
+    // Clear session
     clearSession(): void {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.refreshTokenKey);
@@ -61,27 +66,23 @@ export class AuthService {
         this.currentUserSubject.next(null);
     }
 
-    // Get token from localStorage
+    // Getters
     getToken(): string | null {
         return localStorage.getItem(this.tokenKey);
     }
 
-    // Get refresh token
     getRefreshToken(): string | null {
         return localStorage.getItem(this.refreshTokenKey);
     }
 
-    // Get user from BehaviorSubject (current value)
     getAuthUser(): Login | null {
         return this.currentUserSubject.value;
     }
 
-    // Observable to subscribe to user changes
     currentUser$(): Observable<Login | null> {
         return this.currentUserSubject.asObservable();
     }
 
-    // Private helper to load user from localStorage on service init
     private getUserFromStorage(): Login | null {
         const userJson = localStorage.getItem(this.userKey);
         return userJson ? JSON.parse(userJson) : null;

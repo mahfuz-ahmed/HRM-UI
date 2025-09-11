@@ -1,62 +1,97 @@
-<div class="grid">
-  <div class="col-12">
-    <div class="card card-compact">
-      <h5>Employee Management</h5>
-      <p-toolbar >
-        <div class="p-toolbar-group-left">
-          <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-success mr-2" (click)="employeeCreate()" pTooltip="Create New Employee" tooltipPosition="bottom"></button>
-          <button type="button" pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2" (click)="confirmEmployeeDelete()" pTooltip="Employee Delete" tooltipPosition="bottom" [disabled]="!selectedEmployee"></button>
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="employeeCreate()" />
+        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="confirmEmployeeDelete()" [disabled]="!selectedEmployee || !selectedEmployee.length" />
+    </ng-template>
+
+    <ng-template #end>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+    </ng-template>
+</p-toolbar>
+
+<p-table
+    #dt
+    [value]="employees"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="['id', 'fullName', 'email', 'isActive', 'userDetails.departmentName', 'userDetails.designationName']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selectedEmployee"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Employee List</h5>
+            <p-iconfield>
+                <input #searchInput type="text" pInputText (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search" />
+            </p-iconfield>
         </div>
-        <div class="p-toolbar-group-right">
-          <span class="p-input-icon-right">
-            <input #searchInput type="text" pInputText (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search" />
-          </span>
-        </div>
-      </p-toolbar>
-      <div style="overflow-x: auto; max-width: 100%"></div>
-        <p-table #dt
-                 selectionMode="single"
-                 styleClass="p-datatable-sm"
-                 [(selection)]="selectedEmployee"
-                 [paginator]="true"
-                 [rows]="10"
-                 [value]="employees"
-                 [showCurrentPageReport]="true"
-                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                 [rowsPerPageOptions]="[5, 10, 20, 50]"
-                 [globalFilterFields]="['id','firstName','email','isActive']"
-                 [tableStyle]="{ 'min-width': '50rem' }">
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 3rem">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox />
+            </th>
+            <th pSortableColumn="email" style="min-width: 6rem">
+                Email
+                <p-sortIcon field="email" />
+            </th>
+            <th pSortableColumn="fullName" style="min-width: 6rem">
+                Full Name
+                <p-sortIcon field="fullName" />
+            </th>
+            <th pSortableColumn="departmentName" style="min-width: 10rem">
+                Department
+                <p-sortIcon field="departmentName" />
+            </th>
+            <th pSortableColumn="designationName" style="min-width: 10rem">
+                Designation
+                <p-sortIcon field="designationName" />
+            </th>
+            <th pSortableColumn="admin" style="min-width: 6rem">
+                Admin
+                <p-sortIcon field="admin" />
+            </th>
+            <th pSortableColumn="status" style="min-width: 6rem">
+                Status
+                <p-sortIcon field="status" />
+            </th>
+            <th style="min-width: 10rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-employee>
+        <tr>
+            <td style="width: 3rem">
+                <p-tableCheckbox [value]="employee" />
+            </td>
+            <td style="min-width: 12rem">{{ employee.email }}</td>
 
-              <th pSortableColumn="email">Email<p-sortIcon field="email"></p-sortIcon></th>
-              <th pSortableColumn="firstName">Full Name<p-sortIcon field="firstName"></p-sortIcon></th>
-              <th pSortableColumn="isAdministrator">Admin<p-sortIcon field="isAdministrator"></p-sortIcon></th>
-              <th pSortableColumn="isActive">Status<p-sortIcon field="isActive"></p-sortIcon></th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-employee>
-            <tr (dblclick)="employeeEdit(employee)" [pSelectableRow]="employee">
-              <td>
-                <p-tableCheckbox [value]="employee"></p-tableCheckbox>
-              </td>
-              <td>{{ employee.email }}</td>
-              <td>{{ employee.fullName}}</td>
-              <td>{{employee.isAdmin ? 'Yes':'No'}}</td>
-              <td>{{employee.isActive ? 'Active':'In Active'}}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      
-    </div>
-  </div>
-  <!-- <p-toast></p-toast> -->
-  <!--<p-confirmDialog></p-confirmDialog> -->
-  
-  <app-loading [isLoading]="loading"></app-loading>
-</div>
+            <td style="min-width: 12rem; height: 4rem" class="flex items-center gap-2">
+                <img [src]="employee?.userDetails?.image ? apiUrl + '/' + employee.userDetails.image : 'assets/images/profile.png'" class="rounded employeeImg" />
+                {{ employee.fullName }}
+            </td>
 
+            <td style="min-width: 12rem">
+                {{ employee.userDetails?.departmentName ?? 'Company' }}
+            </td>
+            <td style="min-width: 10rem">
+                {{ employee.userDetails?.designationName ?? 'Company' }}
+            </td>
 
+            <td style="min-width: 10rem">{{ employee.isAdmin ? 'Yes' : 'No' }}</td>
+            <td style="min-width: 10rem">{{ employee.isActive ? 'Active' : 'In Active' }}</td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="employeeEdit(employee)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteEmployee(employee)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-toast />
+<p-confirmdialog [style]="{ width: '450px' }" />
+<app-loading [isLoading]="loading"></app-loading>

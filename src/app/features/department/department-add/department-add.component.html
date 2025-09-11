@@ -10,7 +10,8 @@
         </div>
         <div class="flex items-center gap-4 mb-4">
             <label class="w-14 font-semibold">Status</label>
-            <p-dropdown appendTo="body" [options]="statusOptions" [(ngModel)]="department.isActive"></p-dropdown>
+            <!-- <p-dropdown [style]="{ width: '15rem' }" appendTo="body" [panelStyle]="{ 'max-width': '20rem' }" [options]="statusOptions" [(ngModel)]="department.isActive"></p-dropdown> -->
+            <p-dropdown [style]="{ width: '15rem' }" appendTo="body" [panelStyle]="{ width: '15rem' }" [options]="statusOptions" [(ngModel)]="department.isActive"> </p-dropdown>
         </div>
     </div>
 

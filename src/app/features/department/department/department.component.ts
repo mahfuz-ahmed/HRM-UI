@@ -6,19 +6,21 @@ import { DepartmentAddComponent } from '../department-add/department-add.compone
 import { MessageService } from 'primeng/api';
 import { Login } from '../../../domain/models/auth/login';
 import { AuthService } from '../../../domain/services/auth-service/auth.service';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 @Component({
     selector: 'app-department',
-    imports: [SharedPrimeNgModule, DepartmentAddComponent],
+    imports: [SharedPrimeNgModule, DepartmentAddComponent, LoadingComponent],
     templateUrl: './department.component.html',
     styleUrl: './department.component.scss'
 })
 export class DepartmentComponent {
     departments!: Department[];
-    selectedDepartment!: Department[];
+    selectedDepartment: Department[] = [];
+    loading: boolean = false;
     clonedDepartments: { [s: string]: Department } = {};
-    @ViewChild('addDialog') addDialog!: DepartmentAddComponent;
     loginUser!: Login;
+    @ViewChild('addDialog') addDialog!: DepartmentAddComponent;
 
     constructor(
         private departmentService: DepartmentService,
@@ -34,14 +36,20 @@ export class DepartmentComponent {
     ];
 
     async ngOnInit() {
+        this.loading = true;
         await this.getallDepartment();
     }
 
     async getallDepartment() {
-        this.departmentService.getDataByCompanyId(this.loginUser.companyID).then((data) => {
-            this.departments = data;
-            console.log('Departments', this.departments);
-        });
+        this.loading = true;
+        try {
+            this.departments = await this.departmentService.getDataByCompanyId(this.loginUser.companyID);
+        } catch (error) {
+            console.error(error);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load departments' });
+        } finally {
+            this.loading = false;
+        }
     }
 
     openAddDialog() {
@@ -49,7 +57,6 @@ export class DepartmentComponent {
     }
 
     async onDepartmentSaved() {
-        // Refresh your department list or do other actions
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Department Save Successfully.', life: 3000 });
         await this.getallDepartment();
     }
@@ -66,8 +73,6 @@ export class DepartmentComponent {
                 await this.departmentService.updateDepartment(department);
 
                 delete this.clonedDepartments[department.id]; // remove backup after successful save
-
-                // Optional toast
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Department updated' });
             } else {
                 // rollback if invalid
@@ -86,10 +91,18 @@ export class DepartmentComponent {
         delete this.clonedDepartments[department.id]; // cleanup
     }
 
-    // departmentCreate() {}
-
     async departmentDelete() {
         try {
+            if (!this.selectedDepartment?.length) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Warning',
+                    detail: 'Please select at least one item',
+                    life: 3000
+                });
+                return;
+            }
+
             for (let dept of this.selectedDepartment) {
                 await this.departmentService.deleteDepartmentById(dept.id);
             }
@@ -100,11 +113,24 @@ export class DepartmentComponent {
                 detail: 'Departments Deleted Successfully.',
                 life: 3000
             });
-
-            await this.getallDepartment();
-            this.selectedDepartment = []; // clear selection
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting departments:', error);
+
+            if (error.error?.title === 'IsUsed') {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Warning',
+                    detail: error.error?.detail || 'This Department is used in another component'
+                });
+            } else {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Failed to delete departments'
+                });
+            }
+        } finally {
+            await this.getallDepartment();
         }
     }
 }
