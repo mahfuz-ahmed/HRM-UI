@@ -1,9 +1,9 @@
-🧑‍💼 HRM System – Angular Frontend
+<h1>🧑‍💼 HRM System – Angular Frontend</h1> 
 
 A Human Resource Management (HRM) system built with Angular 18, featuring responsive design, real-time updates, and secure API integration.
 This project includes user management, authentication, departments, designations, and more.
 
-🚀 Features
+<h3>🚀 Features</h3> 
 
 🔐 Authentication & Authorization – Signup, Login, JWT Token-based security
 
@@ -25,7 +25,7 @@ This project includes user management, authentication, departments, designations
 
 🧭 Lifecycle Hooks – Implemented for performance optimization and clean component management
 
-🛠️ Tech Stack
+<h3>🛠️ Tech Stack</h3>
 
 Frontend Framework: Angular 18
 
@@ -45,7 +45,7 @@ HTTP Communication: HttpClient
 
 Architecture: Component-based & Modular Structure
 
-🔗 Backend Integration
+<h3>🔗Backend Integration</h3> 
 
 This Angular project connects to the HRM Portal API built with ASP.NET Core Web API.
 
@@ -53,7 +53,7 @@ You can find the backend here:
 
 🔗 [HRM Portal Repository](https://github.com/mahfuz-ahmed/HRM-Portal)
 
-🧩 Key Angular Concepts Used
+<h3>🧩 Key Angular Concepts Used</h3>
 
 Component-based architecture
 
@@ -71,7 +71,7 @@ Interceptors for JWT token handling
 
 RxJS for async data handling
 
-🧑‍💻 Author
+<h3>🧑‍💻 Author</h3>
 
 Mahfuz Ahmed
 Full-stack Software Engineer (Angular, ASP.NET Core, SQL Server)
