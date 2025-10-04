@@ -26,14 +26,17 @@ This project includes user management, authentication, departments, designations
 🧭 Lifecycle Hooks – Implemented for performance optimization and clean component management
 
 🛠️ Tech Stack
-Category	Technology
-Frontend Framework	Angular 18
-UI Library	PrimeNG, Bootstrap 5
-Real-time Communication	SignalR
-State Management RxJS
-Authentication JWT
-Forms Reactive Forms
-Routing	Angular Router (Lazy Loading)
+
+Frontend Framework: Angular 18
+UI Libraries: PrimeNG, Bootstrap 5
+State Management: RxJS
+Real-time Communication: SignalR
+Authentication: JWT (JSON Web Token)
+Forms: Reactive Forms
+Routing: Angular Router (Lazy Loading)
+HTTP Communication: HttpClient
+Architecture: Component-based & Modular Structure
+Deployment: Netlify / Vercel (optional)
 
 
 🔗 Backend Integration
