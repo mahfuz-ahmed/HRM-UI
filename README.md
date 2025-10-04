@@ -35,11 +35,13 @@ Authentication JWT
 Forms Reactive Forms
 Routing	Angular Router (Lazy Loading)
 
+
 🔗 Backend Integration
 
 This Angular project connects to the HRM Portal API built with ASP.NET Core Web API.
 You can find the backend here:
 🔗 HRM Portal Repository
+
 
 🧩 Key Angular Concepts Used
 
