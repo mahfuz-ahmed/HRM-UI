@@ -1,59 +1,66 @@
-# Sakai19
+🧑‍💼 HRM System – Angular Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+A Human Resource Management (HRM) system built with Angular 18, featuring responsive design, real-time updates, and secure API integration.
+This project includes user management, authentication, departments, designations, and more.
 
-## Development server
+🚀 Features
 
-To start a local development server, run:
+🔐 Authentication & Authorization – Signup, Login, JWT Token-based security
 
-```bash
-ng serve
-```
+👥 User Management – Manage employees, roles, and permissions
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+🏢 Department & Designation – Full CRUD operations
 
-## Code scaffolding
+⚡ Real-time Updates – Integrated SignalR for live notifications and data sync
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+🧱 Reusable Components – Built with PrimeNG and Bootstrap for UI consistency
 
-```bash
-ng generate component component-name
-```
+🌐 API Integration – Connected securely with ASP.NET Core Web API backend
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+⚙️ Routing & Navigation – Modular routing with lazy loading
 
-```bash
-ng generate --help
-```
+📋 Reactive Forms – Used for form validation and dynamic data handling
 
-## Building
+🔁 RxJS & Observables – Handled async operations and real-time streams efficiently
 
-To build the project run:
+🧭 Lifecycle Hooks – Implemented for performance optimization and clean component management
 
-```bash
-ng build
-```
+🛠️ Tech Stack
+Category	Technology
+Frontend Framework	Angular 18
+UI Library	PrimeNG, Bootstrap 5
+Real-time Communication	SignalR
+State Management RxJS
+Authentication JWT
+Forms Reactive Forms
+Routing	Angular Router (Lazy Loading)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+🔗 Backend Integration
 
-## Running unit tests
+This Angular project connects to the HRM Portal API built with ASP.NET Core Web API.
+You can find the backend here:
+🔗 HRM Portal Repository
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+🧩 Key Angular Concepts Used
 
-```bash
-ng test
-```
+Component-based architecture
 
-## Running end-to-end tests
+Lazy-loaded feature modules
 
-For end-to-end (e2e) testing, run:
+Lifecycle hooks (ngOnInit, ngOnDestroy, etc.)
 
-```bash
-ng e2e
-```
+HttpClient for API integration
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Reactive forms with validations
 
-## Additional Resources
+Route guards for secured navigation
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Interceptors for JWT token handling
+
+RxJS for async data handling
+
+🧑‍💻 Author
+
+Mahfuz Ahmed
+Full-stack Software Engineer (Angular, ASP.NET Core, SQL Server)
+📧 mahfuz.ahmed.se@gmail.com
