@@ -28,23 +28,30 @@ This project includes user management, authentication, departments, designations
 🛠️ Tech Stack
 
 Frontend Framework: Angular 18
-UI Libraries: PrimeNG, Bootstrap 5
-State Management: RxJS
-Real-time Communication: SignalR
-Authentication: JWT (JSON Web Token)
-Forms: Reactive Forms
-Routing: Angular Router (Lazy Loading)
-HTTP Communication: HttpClient
-Architecture: Component-based & Modular Structure
-Deployment: Netlify / Vercel (optional)
 
+UI Libraries: PrimeNG, Bootstrap 5
+
+State Management: RxJS
+
+Real-time Communication: SignalR
+
+Authentication: JWT (JSON Web Token)
+
+Forms: Reactive Forms
+
+Routing: Angular Router (Lazy Loading)
+
+HTTP Communication: HttpClient
+
+Architecture: Component-based & Modular Structure
 
 🔗 Backend Integration
 
 This Angular project connects to the HRM Portal API built with ASP.NET Core Web API.
-You can find the backend here:
-🔗 HRM Portal Repository
 
+You can find the backend here:
+
+🔗 [HRM Portal Repository](https://github.com/mahfuz-ahmed/HRM-Portal)
 
 🧩 Key Angular Concepts Used
 
@@ -68,4 +75,5 @@ RxJS for async data handling
 
 Mahfuz Ahmed
 Full-stack Software Engineer (Angular, ASP.NET Core, SQL Server)
+
 📧 mahfuz.ahmed.se@gmail.com
