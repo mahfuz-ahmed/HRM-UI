@@ -22,6 +22,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CardModule } from 'primeng/card';
 import { FileUploadModule } from 'primeng/fileupload';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
     exports: [
@@ -45,7 +46,8 @@ import { FileUploadModule } from 'primeng/fileupload';
         InputIconModule,
         DatePickerModule,
         CardModule,
-        FileUploadModule
+        FileUploadModule,
+        CalendarModule
     ],
     providers: [MessageService, ConfirmationService]
 })

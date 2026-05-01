@@ -1,0 +1,114 @@
+<div class="attendance-container">
+    <div class="attendance-row">
+        <div class="attendance-card present">
+            <p class="label">Present</p>
+            <h3 class="value">{{ attendanceSummary.totalPresent }}</h3>
+        </div>
+
+        <div class="attendance-card absent">
+            <p class="label">Absent</p>
+            <h3 class="value">{{ attendanceSummary.totalAbsent }}</h3>
+        </div>
+
+        <div class="attendance-card late">
+            <p class="label">Late</p>
+            <h3 class="value">{{ attendanceSummary.totalLate }}</h3>
+        </div>
+
+        <div class="attendance-card leave">
+            <p class="label">Leave</p>
+            <h3 class="value">{{ attendanceSummary.totalLeave }}</h3>
+        </div>
+    </div>
+</div>
+
+<p-table
+    #dt
+    [value]="attendances"
+    [rows]="10"
+    [paginator]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+    [globalFilterFields]="['fullName', 'departmentName', 'status']"
+    [rowHover]="true"
+    dataKey="id"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} attendances"
+    [showCurrentPageReport]="true"
+    [(selection)]="selectedAttendent"
+>
+    <!-- Header with Search -->
+
+    <!-- <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Attendance List</h5>
+
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search"></p-inputicon>
+                <input #searchInput type="text" pInputText (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search Attendance..." />
+            </p-iconfield>
+        </div>
+    </ng-template> -->
+
+    <ng-template #caption>
+        <div class="flex items-center justify-between flex-wrap gap-3">
+            <h5 class="m-0">Attendance List</h5>
+
+            <div class="flex items-center gap-2">
+                <!-- Start Date -->
+                <p-calendar [(ngModel)]="startDate" dateFormat="dd M yy" placeholder="Start Date" [showIcon]="true" inputId="startDate"> </p-calendar>
+
+                <!-- End Date -->
+                <p-calendar [(ngModel)]="endDate" dateFormat="dd M yy" placeholder="End Date" [showIcon]="true" inputId="endDate"> </p-calendar>
+
+                <!-- Filter Button -->
+                <p-button label="Filter" icon="pi pi-filter" (click)="loadAttendanceByDateRange()" severity="info"> </p-button>
+
+                <!-- Search -->
+                <p-iconfield>
+                    <p-inputicon styleClass="pi pi-search"></p-inputicon>
+                    <input #searchInput type="text" pInputText (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search Attendance..." />
+                </p-iconfield>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Table Header -->
+    <ng-template #header>
+        <tr>
+            <th pSortableColumn="fullName">Name <p-sortIcon field="fullName" /></th>
+            <th pSortableColumn="departmentName">Department <p-sortIcon field="departmentName" /></th>
+            <th pSortableColumn="checkIn">Check In <p-sortIcon field="checkIn" /></th>
+            <th pSortableColumn="checkOut">Check Out <p-sortIcon field="checkOut" /></th>
+            <th pSortableColumn="breakMinutes">Break <p-sortIcon field="breakMinutes" /></th>
+            <th pSortableColumn="lateMinutes">Late <p-sortIcon field="lateMinutes" /></th>
+            <th pSortableColumn="productionMinutes">Production Hour <p-sortIcon field="productionMinutes" /></th>
+            <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+            <th>Actions</th>
+        </tr>
+    </ng-template>
+
+    <!-- Table Body -->
+    <ng-template #body let-attendance>
+        <tr>
+            <td>{{ attendance.fullName }}</td>
+            <td>{{ attendance.departmentName }}</td>
+            <td>{{ attendance.checkIn | date: 'dd MMM yyyy, hh:mm a' }}</td>
+            <td>{{ attendance.checkOut | date: 'dd MMM yyyy, hh:mm a' }}</td>
+            <td class="text-center">{{ attendance.breakMinutes }}</td>
+            <td class="text-center">{{ attendance.lateMinutes }}</td>
+            <td class="text-center">{{ attendance.productionMinutes }}</td>
+            <td class="text-center">
+                <span [ngClass]="getStatusClass(attendance.status)">
+                    {{ attendance.status }}
+                </span>
+            </td>
+            <td class="text-center">
+                <p-button icon="pi pi-pencil" [rounded]="true" [outlined]="true" severity="info" (click)="editAttendance(attendance)"></p-button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-toast />
+<p-confirmdialog [style]="{ width: '450px' }" />
+<app-loading [isLoading]="loading"></app-loading>

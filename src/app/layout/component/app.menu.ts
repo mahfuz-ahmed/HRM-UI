@@ -28,6 +28,24 @@ export class AppMenu {
                 label: 'UI Components',
                 items: [
                     { label: 'Employee', icon: 'pi pi-fw pi-id-card', routerLink: ['/features/employees'] },
+
+                    {
+                        label: 'Attendance',
+                        icon: 'pi pi-fw pi-address-book',
+                        items: [
+                            {
+                                label: 'CheckIn',
+                                icon: 'pi pi-fw pi-user',
+                                routerLink: ['/features/checkin-checkout']
+                            },
+                            {
+                                label: 'Attendance',
+                                icon: 'pi pi-fw pi-user',
+                                routerLink: ['/features/attendence-list']
+                            }
+                        ]
+                    },
+
                     { label: 'Department', icon: 'pi pi-fw pi-id-card', routerLink: ['/features/department'] },
                     { label: 'Designation', icon: 'pi pi-fw pi-id-card', routerLink: ['/features/designation'] },
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
